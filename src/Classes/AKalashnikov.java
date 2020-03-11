@@ -33,7 +33,7 @@ public class AKalashnikov extends Gun {
             else if (count>5){
                 count-=5;
                 setHolder(count);
-                System.out.println("Left: " + count + "\n");
+                System.out.println("Left: " + getHolder() + "\n");
             }
         }
 
