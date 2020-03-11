@@ -1,63 +1,42 @@
 package Classes;
 
 import Abstracts.Gun;
-import Interfaces.GunInformation;
 
-public class AKalashnikov extends Gun implements GunInformation {
+public class AKalashnikov extends Gun {
 
-    private String color;
     private String model;
+    private boolean singleFire = false;
+    private boolean autoFire = false;
 
-    public AKalashnikov(double weight, double caliber, int initialSpeed, int holder, String color, String model) {
-        super(weight, caliber, initialSpeed, holder);
-        this.color = color;
+
+    public AKalashnikov(int holder, String model) {
+        super(holder);
         this.model = model;
     }
 
+
     @Override
-    public void singleFire() {
+    public void fire() {
         int count = getHolder();
-        if(count>0){
-            count--;
-            setHolder(count);
-            System.out.println("BooooooM");
-            System.out.println("Left: " + count + " bullets");
-        }
-        else{
+        if (count <= 0){
             System.out.println("The holder is empty");
         }
-
-    }
-
-    @Override
-    public void autoFire() {
-        int count = getHolder();
-        if(count>=5){
-            count-=5;
-            setHolder(count);
-            System.out.println("BooooooM-BooooooM");
-            System.out.println("Left: " + count + " bullets");
+        else if (isSingleFire()){
+            setHolder(--count);
+            System.out.println("Left: " + getHolder() + "\n");
         }
-        else{
-            System.out.println("The holder is empty");
+        else if (isAutoFire()){
+            if(count<=5){
+                setHolder(0);
+                System.out.println("Used all of bullets: " + getHolder());
+            }
+            else if (count>5){
+                count-=5;
+                setHolder(count);
+                System.out.println("Left: " + count + "\n");
+            }
         }
-    }
 
-    //implemented method
-    @Override
-    public void info() {
-        System.out.println("-----------Information-------------");
-        System.out.println("Abstracts.Gun model: " + getModel() + "\n" + "Abstracts.Gun weight: " + getWeight() + " kg" + "\n"
-                + "Abstracts.Gun caliber: " + getCaliber() + " mm" + "\n" + "Muzzle velocity: " + getInitialSpeed() + " km/h" + "\n"
-                + "Count of bullets in the holder: " + getHolder() + " pieces" + "\n" + "Abstracts.Gun color: " + getColor() + "\n");
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String getModel() {
@@ -66,6 +45,36 @@ public class AKalashnikov extends Gun implements GunInformation {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public boolean isSingleFire() {
+        return singleFire;
+    }
+
+    public void setSingleFire(boolean singleFire) {
+        if(singleFire){
+            setAutoFire(false);
+            System.out.println("Turn on Singe Fire option");
+        }
+        this.singleFire = singleFire;
+    }
+
+    public boolean isAutoFire() {
+        return autoFire;
+    }
+
+    public void setAutoFire(boolean autoFire) {
+        if(autoFire) {
+            setSingleFire(false);
+            System.out.println("Turn on Auto Fire option");
+        }
+        this.autoFire = autoFire;
+    }
+
+    public int getFuel(int countOfBullets){
+        System.out.println("Fill up: " + countOfBullets + " bullets" + "\n");
+        setHolder(countOfBullets);
+        return getHolder();
     }
 
 }
